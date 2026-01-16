@@ -106,7 +106,6 @@ export default function DoctorsManagement() {
   const [newDoctorData, setNewDoctorData] = useState<DoctorFormData>({
     name: "",
     specialization: "",
-    department: "",
     email: "",
     phone: "",
     bio: "",
@@ -153,7 +152,6 @@ export default function DoctorsManagement() {
         setNewDoctorData({
           name: "",
           specialization: "",
-          department: "",
           email: "",
           phone: "",
           bio: "",
@@ -197,7 +195,6 @@ export default function DoctorsManagement() {
     setNewDoctorData({
       name: doctor.name,
       specialization: doctor.specialization,
-      department: doctor.department,
       email: doctor.email,
       phone: doctor.phone,
       bio: doctor.bio || "",
@@ -223,12 +220,8 @@ export default function DoctorsManagement() {
     if (!selectedDoctor) return;
 
     // Basic validation
-    if (
-      !newDoctorData.name ||
-      !newDoctorData.specialization ||
-      !newDoctorData.department
-    ) {
-      toast.error("Name, specialization, and department are required");
+    if (!newDoctorData.name || !newDoctorData.specialization) {
+      toast.error("Name and specialization are required");
       return;
     }
 
@@ -252,7 +245,6 @@ export default function DoctorsManagement() {
           setNewDoctorData({
             name: "",
             specialization: "",
-            department: "",
             email: "",
             phone: "",
             bio: "",
@@ -361,29 +353,16 @@ export default function DoctorsManagement() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="specialization">Specialization *</Label>
-                        <Input
-                          id="specialization"
-                          value={newDoctorData.specialization}
-                          onChange={(e) =>
-                            handleInputChange("specialization", e.target.value)
-                          }
-                          required
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="department">Department *</Label>
-                        <Input
-                          id="department"
-                          value={newDoctorData.department}
-                          onChange={(e) =>
-                            handleInputChange("department", e.target.value)
-                          }
-                          required
-                        />
-                      </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="specialization">Specialization *</Label>
+                      <Input
+                        id="specialization"
+                        value={newDoctorData.specialization}
+                        onChange={(e) =>
+                          handleInputChange("specialization", e.target.value)
+                        }
+                        required
+                      />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
@@ -441,7 +420,7 @@ export default function DoctorsManagement() {
             <div className="relative flex-1 max-w-sm">
               <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search doctors by name, specialization, department, or email..."
+                placeholder="Search doctors by name, specialization, or email..."
                 value={searchTerm}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 className="pl-8"
@@ -464,7 +443,6 @@ export default function DoctorsManagement() {
                 <TableRow>
                   <TableHead>Doctor</TableHead>
                   <TableHead>Specialization</TableHead>
-                  <TableHead>Department</TableHead>
                   <TableHead>Contact</TableHead>
                   <TableHead>Experience</TableHead>
                   <TableHead>Fee</TableHead>
@@ -484,9 +462,6 @@ export default function DoctorsManagement() {
                       </div>
                     </TableCell>
                     <TableCell>{doctor.specialization}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline">{doctor.department}</Badge>
-                    </TableCell>
                     <TableCell>
                       <div className="flex flex-col">
                         <span className="text-sm">{doctor.email}</span>
@@ -596,7 +571,10 @@ export default function DoctorsManagement() {
                     : "There are no doctors in the system yet."}
                 </p>
                 {searchTerm && (
-                  <Button variant="outline" onClick={() => handleSearchChange("")}>
+                  <Button
+                    variant="outline"
+                    onClick={() => handleSearchChange("")}
+                  >
                     Clear Search
                   </Button>
                 )}
@@ -742,29 +720,16 @@ export default function DoctorsManagement() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="edit-specialization">Specialization *</Label>
-                <Input
-                  id="edit-specialization"
-                  value={newDoctorData.specialization}
-                  onChange={(e) =>
-                    handleInputChange("specialization", e.target.value)
-                  }
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="edit-department">Department *</Label>
-                <Input
-                  id="edit-department"
-                  value={newDoctorData.department}
-                  onChange={(e) =>
-                    handleInputChange("department", e.target.value)
-                  }
-                  required
-                />
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-specialization">Specialization *</Label>
+              <Input
+                id="edit-specialization"
+                value={newDoctorData.specialization}
+                onChange={(e) =>
+                  handleInputChange("specialization", e.target.value)
+                }
+                required
+              />
             </div>
 
             <div className="grid grid-cols-2 gap-4">

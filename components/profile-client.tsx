@@ -410,13 +410,13 @@ export default function ProfileClient() {
                   <User className="h-4 w-4" />
                   Profile
                 </TabsTrigger>
-                <TabsTrigger
+                {/* <TabsTrigger
                   value="security"
                   className="flex items-center gap-2"
                 >
                   <Key className="h-4 w-4" />
                   Security
-                </TabsTrigger>
+                </TabsTrigger> */}
                 <TabsTrigger
                   value="settings"
                   className="flex items-center gap-2"

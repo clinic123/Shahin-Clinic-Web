@@ -36,6 +36,11 @@ function AdminPostsPage({
   if (posts.length === 0) {
     return (
       <div className="text-center py-12">
+        <div className="flex justify-between">
+          <Link href={`/${params}/blogs/create`}>
+            <Button>Create New Blog</Button>
+          </Link>
+        </div>
         <p className="text-muted-foreground">
           No blog posts found. Create one to get started!
         </p>

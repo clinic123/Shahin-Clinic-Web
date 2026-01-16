@@ -29,7 +29,7 @@ export interface Doctor {
 export interface DoctorFormData {
   name?: string;
   specialization: string;
-  department: string;
+  department?: string;
   email?: string;
   phone: string;
   bio?: string;
@@ -410,7 +410,6 @@ export const useDoctorSearch = (searchTerm: string) => {
         doctor.specialization
           .toLowerCase()
           .includes(searchTerm.toLowerCase()) ||
-        doctor.department.toLowerCase().includes(searchTerm.toLowerCase()) ||
         doctor.email.toLowerCase().includes(searchTerm.toLowerCase())
     ) || [];
 

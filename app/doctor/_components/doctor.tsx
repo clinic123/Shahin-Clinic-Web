@@ -120,7 +120,6 @@ export default function DoctorAppointmentsPageComponent({
 
   const [formData, setFormData] = useState({
     specialization: doctor?.specialization || "",
-    department: doctor?.department || "",
     phone: doctor?.phone || "",
     bio: doctor?.bio || "",
     experience: doctor?.experience || 0,
@@ -139,7 +138,6 @@ export default function DoctorAppointmentsPageComponent({
     if (doctor) {
       setFormData({
         specialization: doctor.specialization || "",
-        department: doctor.department || "",
         phone: doctor.phone || "",
         bio: doctor.bio || "",
         experience: doctor.experience || 0,
@@ -161,10 +159,6 @@ export default function DoctorAppointmentsPageComponent({
   const validateForm = () => {
     if (!formData.specialization.trim()) {
       toast.error("Specialization is required");
-      return false;
-    }
-    if (!formData.department.trim()) {
-      toast.error("Department is required");
       return false;
     }
     if (!formData.phone.trim()) {
@@ -191,7 +185,6 @@ export default function DoctorAppointmentsPageComponent({
       // Reset to current doctor data
       setFormData({
         specialization: editingDoctor.specialization || "",
-        department: editingDoctor.department || "",
         phone: editingDoctor.phone || "",
         bio: editingDoctor.bio || "",
         experience: editingDoctor.experience || 0,
@@ -204,7 +197,6 @@ export default function DoctorAppointmentsPageComponent({
       // Reset to empty form for new profile
       setFormData({
         specialization: "",
-        department: "",
         phone: "",
         bio: "",
         experience: 0,
@@ -336,9 +328,7 @@ export default function DoctorAppointmentsPageComponent({
             <div className="flex justify-between items-center">
               <div>
                 <CardTitle>Dr. {doctor.name}</CardTitle>
-                <CardDescription>
-                  {doctor.specialization} - {doctor.department}
-                </CardDescription>
+                <CardDescription>{doctor.specialization}</CardDescription>
               </div>
               <Badge variant="default" className="text-sm">
                 Doctor Dashboard
@@ -379,41 +369,16 @@ export default function DoctorAppointmentsPageComponent({
             }
             className="space-y-4"
           >
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="specialization">Specialization *</Label>
-                <Input
-                  id="specialization"
-                  value={formData.specialization}
-                  onChange={(e) =>
-                    handleInputChange("specialization", e.target.value)
-                  }
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="department">Department *</Label>
-                <Select
-                  value={formData.department}
-                  onValueChange={(value) =>
-                    handleInputChange("department", value)
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select department" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Cardiology">Cardiology</SelectItem>
-                    <SelectItem value="Neurology">Neurology</SelectItem>
-                    <SelectItem value="Orthopedics">Orthopedics</SelectItem>
-                    <SelectItem value="Pediatrics">Pediatrics</SelectItem>
-                    <SelectItem value="Dermatology">Dermatology</SelectItem>
-                    <SelectItem value="Psychiatry">Psychiatry</SelectItem>
-                    <SelectItem value="Surgery">Surgery</SelectItem>
-                    <SelectItem value="Radiology">Radiology</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="specialization">Specialization *</Label>
+              <Input
+                id="specialization"
+                value={formData.specialization}
+                onChange={(e) =>
+                  handleInputChange("specialization", e.target.value)
+                }
+                required
+              />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
