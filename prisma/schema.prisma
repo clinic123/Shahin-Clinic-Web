@@ -1,0 +1,633 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/prisma"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String          @id @default(cuid()) @map("_id")
+  name           String
+  email          String
+  emailVerified  Boolean
+  image          String?
+  createdAt      DateTime
+  updatedAt      DateTime
+  sessions       Session[]
+  accounts       Account[]
+  appointments   Appointment[]
+  doctors        Doctor[]
+  scopes         Scope[]
+  role           UserRole        @default(user)
+  banned         Boolean?        @default(false)
+  banReason      String?
+  banExpires     DateTime?
+  posts          Post[]
+  comments       Comment[]
+  forumTopics    ForumTopic[]
+  forumPosts     ForumPost[]
+  forumVotes     ForumVote[]
+  forumFollowers ForumFollower[]
+  phoneNumber    String?
+  cart           Cart?
+  orders         Order[]
+  courseOrders   CourseOrder[]
+  notices        Notice[]
+  caseStudies    CaseStudy[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Counter {
+  id    String @id @default(cuid()) @map("_id")
+  name  String @unique
+  value Int    @default(1)
+
+  @@map("counters")
+}
+
+model Account {
+  id                    String    @id @default(cuid()) @map("_id")
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Session {
+  id        String   @id @default(cuid()) @map("_id")
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Appointment {
+  id                   String            @id @default(auto()) @map("_id") @db.ObjectId
+  serial               Int?
+  patientName          String
+  patientAge           Int
+  patientGender        String
+  mobile               String
+  email                String
+  appointmentDate      DateTime
+  department           String?
+  doctorName           String
+  symptoms             String?
+  paymentMobile        String
+  paymentTransactionId String
+  status               AppointmentStatus @default(PENDING)
+  amountPaid           Float?
+  paymentMethod        PaymentMethod     @default(BKASH)
+  user                 User              @relation(fields: [userId], references: [id])
+  userId               String
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
+  doctor               Doctor?           @relation(fields: [doctorId], references: [id])
+  doctorId             String?           @db.ObjectId
+  scope                Scope?            @relation(fields: [scopeId], references: [id])
+  scopeId              String?           @db.ObjectId
+  rejectionReason      String?
+  appointmentType      AppointmentType?  @default(IN_PERSON)
+  isScope              Boolean?
+
+  @@map("appointment")
+}
+
+enum AppointmentType {
+  IN_PERSON
+  VIRTUAL
+}
+
+enum UserRole {
+  user
+  admin
+  doctor
+  scope
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+model Verification {
+  id         String    @id @default(cuid()) @map("_id")
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+}
+
+model Doctor {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  specialization  String
+  department      String
+  email           String        @unique
+  phone           String
+  bio             String?
+  experience      Int
+  education       String
+  consultationFee Float
+  availableDays   String[]
+  status          DoctorStatus  @default(ACTIVE)
+  user            User?         @relation(fields: [userId], references: [id])
+  userId          String        @unique
+  appointments    Appointment[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  profileImage    String?
+  facebookUrl     String?
+  twitterUrl      String?
+  youtubeUrl      String?
+  linkedinUrl     String?
+  instagramUrl    String?
+
+  @@map("doctor")
+}
+
+enum DoctorStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model Scope {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  specialization  String
+  department      String
+  email           String        @unique
+  phone           String
+  bio             String?
+  experience      Int
+  education       String
+  consultationFee Float
+  availableDays   String[]
+  status          ScopeStatus   @default(ACTIVE)
+  user            User?         @relation(fields: [userId], references: [id])
+  userId          String        @unique
+  appointments    Appointment[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  profileImage    String?
+  facebookUrl     String?
+  twitterUrl      String?
+  youtubeUrl      String?
+  linkedinUrl     String?
+  instagramUrl    String?
+
+  @@map("scope")
+}
+
+enum ScopeStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model Student {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  description  String?
+  image        String?
+  facebookUrl  String?
+  twitterUrl   String?
+  youtubeUrl   String?
+  linkedinUrl  String?
+  instagramUrl String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("student")
+}
+
+enum PaymentMethod {
+  BKASH
+  NAGAD
+  ROCKET
+}
+
+// Blog Models with explicit many-to-many relations for MongoDB
+model Post {
+  id               String    @id @default(cuid()) @map("_id")
+  title            String
+  slug             String    @unique
+  content          String
+  excerpt          String?
+  published        Boolean   @default(true)
+  publishedAt      DateTime?
+  featured         Boolean   @default(false)
+  featuredImage    String?
+  author           User      @relation(fields: [authorId], references: [id])
+  authorId         String
+  categorySlug     String
+  category         Category  @relation(fields: [categorySlug], references: [slug], onDelete: Cascade)
+  tags             PostTag[]
+  comments         Comment[]
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  shortDescription String
+  featuredImageAlt String?
+
+  @@map("post")
+}
+
+model Notice {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  content     String
+  summary     String?
+  isPublished Boolean   @default(false)
+  isPinned    Boolean   @default(false)
+  category    String    @default("general")
+  author      User      @relation(fields: [authorId], references: [id])
+  authorId    String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  publishedAt DateTime?
+  expiresAt   DateTime?
+
+  @@map("notices")
+}
+
+model Gallery {
+  id            String    @id @default(cuid()) @map("_id")
+  title         String
+  description   String
+  published     Boolean   @default(true)
+  publishedAt   DateTime?
+  featuredImage String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("gallery")
+}
+
+model Banner {
+  id          String    @id @default(cuid()) @map("_id")
+  heading     String[]
+  description String
+  image       String
+  button      String
+  buttonLink  String?
+  order       Int       @default(0) // For manual ordering
+  published   Boolean   @default(true)
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("banner")
+}
+
+model Category {
+  id        String   @id @default(cuid()) @map("_id")
+  name      String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Post      Post[]
+
+  @@map("category")
+}
+
+model Tag {
+  id    String    @id @default(cuid()) @map("_id")
+  name  String    @unique
+  slug  String    @unique
+  // Explicit many-to-many relations for MongoDB
+  posts PostTag[]
+
+  @@map("tag")
+}
+
+// Junction table for Post-Tag many-to-many
+model PostTag {
+  id        String   @id @default(cuid()) @map("_id")
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+  tag       Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId     String
+  createdAt DateTime @default(now())
+
+  @@unique([postId, tagId])
+  @@map("post_tag")
+}
+
+model Comment {
+  id        String    @id @default(cuid()) @map("_id")
+  content   String
+  author    User      @relation(fields: [authorId], references: [id])
+  authorId  String
+  post      Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+  parentId  String?
+  parent    Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  replies   Comment[] @relation("CommentReplies")
+  approved  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("comment")
+}
+
+// Cured Case Studies
+model CaseStudy {
+  id                String    @id @default(cuid()) @map("_id")
+  title             String
+  slug              String    @unique
+  content           String
+  excerpt           String?
+  published         Boolean   @default(true)
+  publishedAt       DateTime?
+  featured          Boolean   @default(false)
+  featuredImage     String?
+  featuredImageAlt  String?
+  author            User      @relation(fields: [authorId], references: [id])
+  authorId          String
+  shortDescription  String
+  patientName       String? // Optional: Patient name (can be anonymized)
+  patientAge        Int? // Optional: Patient age
+  condition         String? // Optional: Condition/treatment name
+  treatmentDuration String? // Optional: Duration of treatment
+  outcome           String? // Optional: Treatment outcome summary
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@map("case_study")
+}
+
+// forum 
+
+model ForumCategory {
+  id          String   @id @default(cuid()) @map("_id")
+  name        String
+  slug        String   @unique
+  description String?
+  color       String?  @default("#3B82F6")
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  topics ForumTopic[]
+
+  @@map("forum_category")
+}
+
+model ForumTopic {
+  id             String   @id @default(cuid()) @map("_id")
+  title          String
+  slug           String   @unique
+  content        String
+  views          Int      @default(0)
+  isPinned       Boolean  @default(false)
+  isLocked       Boolean  @default(false)
+  isFeatured     Boolean  @default(false)
+  upvotes        Int      @default(0)
+  downvotes      Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  lastActivityAt DateTime @default(now())
+
+  // Relations
+  category   ForumCategory   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId String
+  author     User            @relation(fields: [authorId], references: [id])
+  authorId   String
+  posts      ForumPost[]
+  votes      ForumVote[]
+  followers  ForumFollower[]
+
+  @@map("forum_topic")
+}
+
+model ForumPost {
+  id        String   @id @default(cuid()) @map("_id")
+  content   String
+  isAnswer  Boolean  @default(false)
+  upvotes   Int      @default(0)
+  downvotes Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  topic    ForumTopic  @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  topicId  String
+  author   User        @relation(fields: [authorId], references: [id])
+  authorId String
+  votes    ForumVote[]
+
+  // Nested replies - fixed for MongoDB
+  parent   ForumPost?  @relation("ForumPostReplies", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  parentId String?
+  replies  ForumPost[] @relation("ForumPostReplies")
+
+  // Add depth for easier querying
+  depth Int @default(0)
+
+  @@map("forum_post")
+}
+
+model ForumVote {
+  id     String   @id @default(cuid()) @map("_id")
+  type   VoteType // UPVOTE or DOWNVOTE
+  userId String
+  user   User     @relation(fields: [userId], references: [id])
+
+  // Polymorphic relations - can vote on either topic or post
+  topicId String?
+  topic   ForumTopic? @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  postId  String?
+  post    ForumPost?  @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, topicId, postId])
+  @@map("forum_vote")
+}
+
+model ForumFollower {
+  id        String     @id @default(cuid()) @map("_id")
+  user      User       @relation(fields: [userId], references: [id])
+  userId    String
+  topic     ForumTopic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  topicId   String
+  createdAt DateTime   @default(now())
+
+  @@unique([userId, topicId])
+  @@map("forum_follower")
+}
+
+enum VoteType {
+  UPVOTE
+  DOWNVOTE
+}
+
+model Book {
+  id                       String   @id @default(auto()) @map("_id") @db.ObjectId
+  title                    String
+  author                   String
+  description              String
+  image                    String
+  price                    Float
+  stock                    Int      @default(0)
+  rokomariLinkForDirectBuy String?
+  amazonLink               String?
+  isActive                 Boolean  @default(true)
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+
+  cartItems  CartItem[]
+  orderItems OrderItem[]
+
+  @@map("book")
+}
+
+model Cart {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  user      User       @relation(fields: [userId], references: [id])
+  userId    String     @unique
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@map("cart")
+}
+
+model CartItem {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  cartId    String
+  book      Book?    @relation(fields: [bookId], references: [id])
+  bookId    String?
+  course    Course?  @relation(fields: [courseId], references: [id])
+  courseId  String?
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([cartId, bookId], name: "cartId_bookId")
+  // Removed cartId_courseId constraint as it causes issues with null values
+  // The cartId_bookId constraint is sufficient to prevent duplicates
+  @@map("cart_item")
+}
+
+model Order {
+  id                   String        @id @default(auto()) @map("_id") @db.ObjectId
+  user                 User          @relation(fields: [userId], references: [id])
+  userId               String
+  items                OrderItem[]
+  totalAmount          Float
+  status               OrderStatus   @default(PENDING)
+  paymentMethod        PaymentMethod @default(BKASH)
+  paymentTransactionId String?
+  paymentMobile        String?
+  shippingAddress      String?
+  customerEmail        String?
+  customerPhone        String?
+  customerName         String?
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+
+  @@map("order")
+}
+
+model OrderItem {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId   String
+  book      Book?    @relation(fields: [bookId], references: [id])
+  bookId    String?
+  quantity  Int
+  price     Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("order_item")
+}
+
+// Add these new models for courses
+model Course {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  title            String
+  description      String
+  shortDescription String?
+  image            String
+  price            Float
+  videoUrl         String? // Private video URL that admin will provide after payment
+  isActive         Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  category         String?
+
+  orders   CourseOrder[]
+  CartItem CartItem[]
+
+  @@map("course")
+}
+
+model CourseOrder {
+  id                   String            @id @default(auto()) @map("_id") @db.ObjectId
+  user                 User              @relation(fields: [userId], references: [id])
+  userId               String
+  course               Course            @relation(fields: [courseId], references: [id])
+  courseId             String
+  totalAmount          Float
+  status               CourseOrderStatus @default(PENDING)
+  paymentMethod        PaymentMethod     @default(BKASH)
+  paymentTransactionId String?
+  paymentMobile        String?
+  customerEmail        String?
+  customerPhone        String?
+  accessGranted        Boolean           @default(false)
+  videoLink            String?
+  accessCode           String? // Unique code for video access
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
+
+  @@unique([accessCode])
+  @@map("course_order")
+}
+
+enum CourseOrderStatus {
+  PENDING
+  CONFIRMED
+  ACCESS_GRANTED
+  CANCELLED
+  COMPLETED
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}

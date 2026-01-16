@@ -1,0 +1,234 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+/* Tiptap Viewer Styles - Clean version */
+.tiptap-viewer-content {
+  font-family: "DM Sans", sans-serif;
+  font-optical-sizing: auto;
+  line-height: 1.6;
+}
+
+.tiptap-viewer-content * {
+  box-sizing: border-box;
+}
+
+/* Paragraph gaps */
+.tiptap-viewer-content p {
+  margin: 1em 0;
+  line-height: 1.6;
+}
+
+.tiptap-viewer-content p.first-paragraph {
+  margin-top: 0;
+}
+
+.tiptap-viewer-content p.last-paragraph {
+  margin-bottom: 0;
+}
+
+/* Heading gaps */
+.tiptap-viewer-content h1,
+.tiptap-viewer-content h2,
+.tiptap-viewer-content h3,
+.tiptap-viewer-content h4,
+.tiptap-viewer-content h5,
+.tiptap-viewer-content h6 {
+  margin: 1.5em 0 0.5em 0;
+  line-height: 1.3;
+  font-family: "DM Sans", sans-serif;
+}
+
+.tiptap-viewer-content h1:first-child,
+.tiptap-viewer-content h2:first-child,
+.tiptap-viewer-content h3:first-child,
+.tiptap-viewer-content h4:first-child,
+.tiptap-viewer-content h5:first-child,
+.tiptap-viewer-content h6:first-child {
+  margin-top: 0;
+}
+
+/* List gaps */
+.tiptap-viewer-content ul,
+.tiptap-viewer-content ol {
+  margin: 0.75em 0;
+  padding-left: 1.5em;
+}
+
+.tiptap-viewer-content li {
+  margin: 0.25em 0;
+  line-height: 1.5;
+}
+
+/* Nested lists */
+.tiptap-viewer-content ul ul,
+.tiptap-viewer-content ul ol,
+.tiptap-viewer-content ol ul,
+.tiptap-viewer-content ol ol {
+  margin: 0.25em 0;
+}
+
+/* Blockquote gaps */
+.tiptap-viewer-content blockquote {
+  margin: 1.5em 0;
+  padding-left: 1em;
+  border-left: 3px solid #e2e8f0;
+}
+
+.tiptap-viewer-content blockquote p {
+  margin: 0.5em 0;
+  font-style: italic;
+}
+
+/* Code block gaps */
+.tiptap-viewer-content pre {
+  margin: 1.5em 0;
+  padding: 1em;
+  border-radius: 0.5em;
+  background: #f8f9fa;
+  overflow-x: auto;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+  font-size: 0.9em;
+}
+
+.tiptap-viewer-content pre code {
+  padding: 0;
+  background: transparent;
+  font-family: inherit;
+}
+
+/* Inline code */
+.tiptap-viewer-content code:not(pre code) {
+  padding: 0.2em 0.4em;
+  background: #f8f9fa;
+  border-radius: 0.25em;
+  font-size: 0.9em;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+}
+
+/* Image gaps */
+.tiptap-viewer-content img.tiptap-image {
+  margin: 1.5em auto;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 0.5em;
+}
+
+/* Horizontal rule gaps */
+.tiptap-viewer-content hr {
+  margin: 2em 0;
+  border: none;
+  border-top: 2px solid #e2e8f0;
+}
+
+/* Table gaps */
+.tiptap-viewer-content table {
+  margin: 1.5em 0;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.tiptap-viewer-content th,
+.tiptap-viewer-content td {
+  padding: 0.75em;
+  border: 1px solid #e2e8f0;
+}
+
+.tiptap-viewer-content th {
+  background: #f8f9fa;
+}
+
+/* Task list styling */
+.tiptap-viewer-content ul[data-type="taskList"] {
+  list-style: none;
+  padding-left: 0;
+}
+
+.tiptap-viewer-content ul[data-type="taskList"] li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0.5em 0;
+}
+
+.tiptap-viewer-content ul[data-type="taskList"] label {
+  margin-top: 0.25em;
+  display: flex;
+  align-items: center;
+}
+
+.tiptap-viewer-content ul[data-type="taskList"] input[type="checkbox"] {
+  margin: 0;
+}
+
+.tiptap-viewer-content ul[data-type="taskList"] > div {
+  flex: 1;
+}
+
+/* Text alignment */
+.tiptap-viewer-content [data-text-align="left"] {
+  text-align: left;
+}
+
+.tiptap-viewer-content [data-text-align="center"] {
+  text-align: center;
+}
+
+.tiptap-viewer-content [data-text-align="right"] {
+  text-align: right;
+}
+
+.tiptap-viewer-content [data-text-align="justify"] {
+  text-align: justify;
+}
+
+/* Highlight styling */
+.tiptap-viewer-content mark {
+  background: #ffeb3b;
+  padding: 0.1em 0.2em;
+  border-radius: 0.25em;
+}
+
+/* Subscript and superscript */
+.tiptap-viewer-content sub,
+.tiptap-viewer-content sup {
+  font-size: 0.75em;
+  line-height: 0;
+}
+
+/* Link styling */
+.tiptap-viewer-content a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.tiptap-viewer-content a:hover {
+  color: #1d4ed8;
+}
+
+/* Mobile responsiveness */
+@media screen and (max-width: 480px) {
+  .tiptap-viewer-content p {
+    margin: 0.875em 0;
+  }
+
+  .tiptap-viewer-content h1,
+  .tiptap-viewer-content h2,
+  .tiptap-viewer-content h3 {
+    margin: 1.25em 0 0.5em 0;
+  }
+
+  .tiptap-viewer-content ul,
+  .tiptap-viewer-content ol {
+    margin: 0.625em 0;
+    padding-left: 1.25em;
+  }
+
+  .tiptap-viewer-content pre {
+    margin: 1.25em 0;
+    padding: 0.875em;
+  }
+
+  .tiptap-viewer-content blockquote {
+    margin: 1.25em 0;
+  }
+}
