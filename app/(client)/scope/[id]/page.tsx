@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import prisma from "@/lib/prisma";
 import { ArrowLeftIcon } from "lucide-react";
+import { Metadata } from "next";
 import { unstable_cache } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,7 +11,6 @@ import { notFound } from "next/navigation";
 import {
   FaBriefcase,
   FaCalendar,
-  FaDollarSign,
   FaEnvelope,
   FaFacebook,
   FaGraduationCap,
@@ -281,7 +281,7 @@ export default async function ScopeDetailsPage({ params }: PageProps) {
 
                     <div className="flex items-start gap-4 p-4 rounded-lg bg-gradient-to-r from-green-50 to-transparent hover:from-green-100 transition-colors">
                       <div className="bg-green-100 p-3 rounded-lg">
-                        <FaDollarSign className="w-5 h-5 text-green-600" />
+                        <span className="text-green-600 text-xl font-bold">৳</span>
                       </div>
                       <div>
                         <label className="text-sm font-semibold text-gray-500 uppercase tracking-wide">

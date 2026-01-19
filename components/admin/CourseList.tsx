@@ -185,7 +185,7 @@ export function CourseList() {
                           <span className="text-muted-foreground">—</span>
                         )}
                       </TableCell>
-                      <TableCell>${course.price}</TableCell>
+                      <TableCell>৳{course.price.toLocaleString()}</TableCell>
                       <TableCell>
                         <Badge
                           variant={course.isActive ? "default" : "secondary"}

@@ -602,7 +602,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/tarif/Documents/projects/doctor-portal-web/prisma/generated/prisma",
+      "value": "D:\\Projects\\Shahin-Clinic-Web\\prisma\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -611,12 +611,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-3.0.x",
+        "value": "windows",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/tarif/Documents/projects/doctor-portal-web/prisma/schema.prisma",
+    "sourceFilePath": "D:\\Projects\\Shahin-Clinic-Web\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

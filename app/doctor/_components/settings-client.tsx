@@ -489,7 +489,7 @@ export default function DoctorSettingsPage({
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="consultationFee">
-                      Consultation Fee ($)
+                      Consultation Fee (৳)
                     </Label>
                     <Input
                       id="consultationFee"

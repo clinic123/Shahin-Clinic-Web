@@ -143,13 +143,11 @@ export default function ScopesManagement() {
     if (
       !newScopeData.name ||
       !newScopeData.email ||
-      !newScopeData.password ||
       !newScopeData.specialization ||
-      !newScopeData.department ||
       !newScopeData.phone
     ) {
       toast.error(
-        "Name, email, password, specialization, department, and phone are required"
+        "Name, email, specialization, and phone are required"
       );
       return;
     }
@@ -158,7 +156,6 @@ export default function ScopesManagement() {
       const result = await createScope({
         name: newScopeData.name,
         email: newScopeData.email,
-        password: newScopeData.password,
         specialization: newScopeData.specialization,
         department: newScopeData.department,
         phone: newScopeData.phone,
@@ -264,10 +261,9 @@ export default function ScopesManagement() {
     // Basic validation
     if (
       !newScopeData.name ||
-      !newScopeData.specialization ||
-      !newScopeData.department
+      !newScopeData.specialization
     ) {
-      toast.error("Name, specialization, and department are required");
+      toast.error("Name and specialization are required");
       return;
     }
 
@@ -421,42 +417,27 @@ export default function ScopesManagement() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="department">Department *</Label>
+                        <Label htmlFor="department">Department</Label>
                         <Input
                           id="department"
                           value={newScopeData.department}
                           onChange={(e) =>
                             handleInputChange("department", e.target.value)
                           }
-                          required
                         />
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="phone">Phone *</Label>
-                        <Input
-                          id="phone"
-                          value={newScopeData.phone}
-                          onChange={(e) =>
-                            handleInputChange("phone", e.target.value)
-                          }
-                          required
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="password">Password *</Label>
-                        <Input
-                          id="password"
-                          type="password"
-                          value={newScopeData.password}
-                          onChange={(e) =>
-                            handleInputChange("password", e.target.value)
-                          }
-                          required
-                        />
-                      </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="phone">Phone *</Label>
+                      <Input
+                        id="phone"
+                        value={newScopeData.phone}
+                        onChange={(e) =>
+                          handleInputChange("phone", e.target.value)
+                        }
+                        required
+                      />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
@@ -880,14 +861,13 @@ export default function ScopesManagement() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="edit-department">Department *</Label>
+                <Label htmlFor="edit-department">Department</Label>
                 <Input
                   id="edit-department"
                   value={newScopeData.department}
                   onChange={(e) =>
                     handleInputChange("department", e.target.value)
                   }
-                  required
                 />
               </div>
             </div>

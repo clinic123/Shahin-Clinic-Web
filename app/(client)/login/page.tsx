@@ -62,7 +62,7 @@ export default function AuthClientPage() {
       if (redirect) {
         router.push(redirect);
       } else {
-        router.push("/dashboard");
+        router.push("/");
       }
     } catch (err) {
       setError(

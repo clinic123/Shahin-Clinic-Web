@@ -9,7 +9,6 @@ import { Metadata } from "next";
 import {
   FaBriefcase,
   FaCalendar,
-  FaDollarSign,
   FaEnvelope,
   FaFacebook,
   FaGraduationCap,
@@ -20,8 +19,6 @@ import {
   FaUserDoctor,
   FaYoutube,
 } from "react-icons/fa6";
-
-import { Metadata } from "next";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -272,7 +269,7 @@ export default async function DoctorDetailsPage({ params }: PageProps) {
 
                     <div className="flex items-start gap-4 p-4 rounded-lg bg-gradient-to-r from-green-50 to-transparent hover:from-green-100 transition-colors">
                       <div className="bg-green-100 p-3 rounded-lg">
-                        <FaDollarSign className="w-5 h-5 text-green-600" />
+                        <span className="text-green-600 text-xl font-bold">৳</span>
                       </div>
                       <div>
                         <label className="text-sm font-semibold text-gray-500 uppercase tracking-wide">

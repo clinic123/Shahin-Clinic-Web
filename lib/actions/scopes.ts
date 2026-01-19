@@ -5,15 +5,16 @@ import { PrismaClient } from "@/prisma/generated/prisma";
 import bcrypt from "bcryptjs";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { headers } from "next/headers";
+import { randomBytes } from "crypto";
 
 const prisma = new PrismaClient();
 
 interface CreateScopeInput {
   name: string;
   email: string;
-  password: string;
+  password?: string;
   specialization: string;
-  department: string;
+  department?: string;
   phone: string;
   bio?: string;
   experience: number;
@@ -67,9 +68,7 @@ export async function createScope(input: CreateScopeInput) {
     if (
       !input.name ||
       !input.email ||
-      !input.password ||
       !input.specialization ||
-      !input.department ||
       !input.phone ||
       !input.experience ||
       !input.education ||
@@ -96,8 +95,11 @@ export async function createScope(input: CreateScopeInput) {
       };
     }
 
+    // Generate random password if not provided
+    const password = input.password || randomBytes(16).toString("hex");
+    
     // Hash password
-    const hashedPassword = await bcrypt.hash(input.password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user and scope in a transaction
     const result = await prisma.$transaction(async (tx) => {
@@ -132,7 +134,7 @@ export async function createScope(input: CreateScopeInput) {
           name: input.name,
           email: input.email,
           specialization: input.specialization,
-          department: input.department,
+          department: input.department || "",
           phone: input.phone,
           bio: input.bio || "",
           experience: input.experience,
@@ -264,7 +266,7 @@ export async function updateScope(scopeId: string, input: UpdateScopeInput) {
       updateData.instagramUrl = input.instagramUrl;
 
     // Update password if provided
-    if (input.password) {
+    if (input.password && existingScope.user) {
       const hashedPassword = await bcrypt.hash(input.password, 10);
       const account = existingScope.user.accounts.find(
         (acc) => acc.providerId === "credential"

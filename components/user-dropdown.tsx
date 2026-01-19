@@ -34,7 +34,7 @@ export function UserDropdown({ user }: UserDropdownProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="relative">
+        <Button variant="outline" className="relative p-0 bg-transparent border-none hover:bg-transparent outline-none focus:ring-0 focus:ring-offset-0">
           {user.image !== "" ? (
             <Avatar>
               <AvatarImage src={user.image || "/avatar.png"} />

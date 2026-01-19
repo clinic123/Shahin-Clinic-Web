@@ -38,6 +38,7 @@ import { CalendarIcon, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import RichTextEditor from "../ui/rich-text-editor";
 
 const noticeFormSchema = z.object({
   title: z.string().min(1, "Title is required").max(200),
@@ -71,7 +72,7 @@ export function NoticeForm({ notice, onSuccess }: NoticeFormProps) {
       summary: notice?.summary || "",
       content: notice?.content || "",
       category: notice?.category || ("general" as any),
-      isPublished: notice?.isPublished || false,
+      isPublished: notice?.isPublished || true,
       isPinned: notice?.isPinned || false,
       expiresAt: notice?.expiresAt ? new Date(notice.expiresAt) : null,
     },
@@ -125,11 +126,11 @@ export function NoticeForm({ notice, onSuccess }: NoticeFormProps) {
             <FormItem>
               <FormLabel>Summary</FormLabel>
               <FormControl>
-                <RichTextEditor
-                  value={field.value || ""}
-                  onChange={field.onChange}
+                <Textarea
                   placeholder="Brief summary of the notice (optional)..."
+                  {...field}
                 />
+              
               </FormControl>
               <FormDescription>
                 A short summary that will be shown in notice lists
